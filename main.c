@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>  // for tolower
+
 #include "operators.h"
 #include "string_demos.h"
 
@@ -87,6 +90,54 @@ void sample_arrays() {
     fgets(str, sizeof(str), stdin);
 }
 
+void reverse_string(char *str) {
+    char *start = str;
+    char *end = str + strlen(str) - 1;
+    char temp;
+
+    while (start < end) {
+        temp = *start;
+        *start = *end;
+        *end = temp;
+
+        start++;
+        end--;
+    }
+}
+
+void count_vowels_and_consonants(const char *str, int *vowels, int *consonants) {
+    *vowels = *consonants = 0;
+
+    while (*str) {
+        char ch = tolower(*str);
+
+        if (ch >= 'a' && ch <= 'z') {
+            if (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u') {
+                (*vowels)++;
+            } else {
+                (*consonants)++;
+            }
+        }
+        str++; // Move to the next character
+    }
+}
+
+int get_string() {
+    char str[100];
+
+    printf("Enter a string: ");
+    fgets(str, sizeof(str), stdin);
+
+    // Remove newline character from fgets input if present
+    str[strcspn(str, "\n")] = '\0';
+
+    printf("Original string: %s\n", str);
+    reverse_string(str);
+    printf("Reversed string: %s\n", str);
+
+    return 0;
+}
+
 
 int main() {
 
@@ -114,41 +165,16 @@ int main() {
     pointer_arithmetic();
     pointer_arithmetic_with_chars();
 
-    return 0;
-}
+    char hello[20] = "Hello, World!";
+    printf("Original string: %s\n", hello);
+    reverse_string(hello);
+    printf("String reversed: %s\n", hello);
 
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
-
-
-void reverse_string(char *str) {
-    char *start = str;
-    char *end = str + strlen(str) - 1;
-    char temp;
-
-    while (start < end) {
-        temp = *start;
-        *start = *end;
-        *end = temp;
-
-        start++;
-        end--;
-    }
-}
-
-int get_string() {
-    char str[100];
-
-    printf("Enter a string: ");
-    fgets(str, sizeof(str), stdin);
-
-    // Remove newline character from fgets input if present
-    str[strcspn(str, "\n")] = '\0';
-
-    printf("Original string: %s\n", str);
-    reverse_string(str);
-    printf("Reversed string: %s\n", str);
+    int vowels, consonants;
+    count_vowels_and_consonants(hello, &vowels, &consonants);
+    printf("Vowels: %d, Consonants: %d", vowels, consonants);
 
     return 0;
 }
+
+
